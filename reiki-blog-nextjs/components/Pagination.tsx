@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 interface IPropType{
     page: number;
     pageCount:number;
-    redirectUrl : string;
+    redirectUrl? : string;
 }
 
 const Pagination = ({page,pageCount, redirectUrl='/'}: IPropType) => {
@@ -30,7 +30,7 @@ const Pagination = ({page,pageCount, redirectUrl='/'}: IPropType) => {
             return;
         }
         const queryString = qs.stringify({
-            ...router.query,
+            //...router.query,
             page:page+direction,
         });
 
