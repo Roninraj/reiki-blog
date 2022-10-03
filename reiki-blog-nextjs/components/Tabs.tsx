@@ -28,7 +28,7 @@ const Tabs = ({categories}:IPropType) => {
                 ?'border-primary text-primary'
                 :'border-white text-gray-400'
             }`}>
-                <Link href={'#'}>Recent</Link>
+                <Link href={'/'}>Recent</Link>
             </li>
             {
                 categories.map(category=>{

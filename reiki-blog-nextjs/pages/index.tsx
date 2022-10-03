@@ -7,6 +7,7 @@ import { fetchArticles, fetchCategories } from '../http';
 import { IArticle, ICategory, ICollectionResponse } from '../types';
 import ArticleList from '../components/ArticleList';
 import qs from 'qs';
+import Pagination from '../components/Pagination';
 
 //Creting interface to pass props 
 interface IPropTypes{
@@ -36,6 +37,8 @@ const Home: NextPage<IPropTypes> = ({categories,articles}) => {
       {/* {Rendering articles} */}
       
       <ArticleList articles={articles.items}/>
+
+      <Pagination/>
   
     </div>
   );
@@ -55,7 +58,7 @@ export const getServerSideProps: GetServerSideProps = async () =>{
   const{data:articles}:AxiosResponse<ICollectionResponse<IArticle[]>> = 
     await fetchArticles(queryString);
 
-  console.log(JSON.stringify(articles));
+  //console.log(JSON.stringify(articles));
   //fetchin categories
   const {
     data: categories,
