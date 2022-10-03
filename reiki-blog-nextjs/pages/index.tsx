@@ -5,7 +5,8 @@ import { useEffect } from 'react';
 import Tabs from '../components/Tabs';
 import { fetchArticles, fetchCategories } from '../http';
 import { IArticle, ICategory, ICollectionResponse } from '../types';
-import ArticleList from './ArticleList';
+import ArticleList from '../components/ArticleList';
+import qs from 'qs';
 
 //Creting interface to pass props 
 interface IPropTypes{
@@ -18,14 +19,14 @@ interface IPropTypes{
 }
 
 const Home: NextPage<IPropTypes> = ({categories,articles}) => {
-  console.log('categories',categories);
+  //console.log('categories',categories);
   return (
     <div>
       <Head>
         <title>Reiki</title>
         <meta
           name="description"
-          content="A sel healing blog for readers"
+          content="A self healing blog for readers"
         />
         <link rel="icon" href="/favicon.ico"/>
       </Head>
@@ -42,9 +43,19 @@ const Home: NextPage<IPropTypes> = ({categories,articles}) => {
 
 export const getServerSideProps: GetServerSideProps = async () =>{
   //Articles
+
+  const options = {
+    populate: ['author.avatar'],
+    sort: ['id:desc'],
+  };
+
+  const queryString = qs.stringify(options);
+  //console.log('string', queryString);
+
   const{data:articles}:AxiosResponse<ICollectionResponse<IArticle[]>> = 
-    await fetchArticles();
-  
+    await fetchArticles(queryString);
+
+  console.log(JSON.stringify(articles));
   //fetchin categories
   const {
     data: categories,

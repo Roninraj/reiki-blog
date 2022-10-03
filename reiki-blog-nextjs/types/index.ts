@@ -27,6 +27,7 @@ export interface ICollectionResponse<T> {
 export interface IImageData{
     data : {
         attributes: {
+            
             url: string;
             formats: {
                 small:{
@@ -45,11 +46,7 @@ export interface IAuthor{
             avatar:{
                 data:{
                     attributes:{
-                        formats: {
-                            thumbnail: {
-                                url:string;
-                            };
-                        };
+                        url:string;
                     };
                 };
             };
@@ -57,16 +54,17 @@ export interface IAuthor{
     };
 }
 
-export interface IArticleAttribute{
+export interface IArticlesAttribute{
     Title: string;
     body: string;
     Slug: string;
     Image: IImageData;
     createdAt: string;
     author: IAuthor;
+    shortDescription : string;
 }
 
 export interface IArticle{
     id: number;
-    attributes: IArticleAttribute
+    attributes: IArticlesAttribute
 }

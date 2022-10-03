@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return <>
     <div className='container mx-auto font-sans'>
         <Navbar/>
-        <main><Component {...pageProps}/></main>
+        <main className='pb-64'><Component {...pageProps}/></main>
         <Footer/>
     </div>
   </>
