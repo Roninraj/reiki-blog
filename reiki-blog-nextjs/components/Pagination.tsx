@@ -30,7 +30,7 @@ const Pagination = ({page,pageCount, redirectUrl='/'}: IPropType) => {
             return;
         }
         const queryString = qs.stringify({
-            //...router.query,
+            ...router.query,
             page:page+direction,
         });
 

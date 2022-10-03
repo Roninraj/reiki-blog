@@ -7,10 +7,10 @@ import Tabs from "../../components/Tabs";
 import { GetServerSideProps } from "next";
 import { fetchArticles, fetchCategories } from "../../http";
 import { AxiosResponse } from "axios";
-import { IArticle, ICategory, ICollectionResponse, IPagination } from "../../types";
+import { IArticle, ICategory, ICollectionResponse, IPagination, IQueryOptions } from "../../types";
 import qs from 'qs';
 import ArticleList from "../../components/ArticleList";
-import { capitalizeFirstLetter, makeCategory } from "../../utils";
+import { capitalizeFirstLetter, debounce, makeCategory } from "../../utils";
 import Pagination from "../../components/Pagination";
 
 
@@ -36,6 +36,10 @@ const category = ({categories, articles, slug}: IPropType) => {
         return capitalizeFirstLetter(makeCategory(slug));
     }
 
+    const handleSearch = (query:string) =>{
+        router.push(`/category/${categorySlug}/?search=${query}`);
+    }
+
     return (
         <>
         <Head>
@@ -47,7 +51,7 @@ const category = ({categories, articles, slug}: IPropType) => {
         <link rel="icon" href="/favicon.ico"/>
       </Head>
 
-      <Tabs categories={categories.items}/>
+      <Tabs categories={categories.items} handleOnSearch={debounce(handleSearch,500)}/>
 
       <ArticleList articles={articles.items}/>
 
@@ -59,7 +63,7 @@ const category = ({categories, articles, slug}: IPropType) => {
 export const getServerSideProps: GetServerSideProps = async ({query}) => {
 
     //console.log('query',query);
-    const options = {
+    const options: Partial<IQueryOptions> = {
         populate: ['author.avatar'],
         sort: ['id:desc'],
         filters:{
@@ -68,10 +72,18 @@ export const getServerSideProps: GetServerSideProps = async ({query}) => {
             },
         },
         pagination : {
-            page: query.page?query.page:1,
+            page: query.page?+query.page:1,
             pageSize : 1,
           },
-    }
+    };
+
+    if(query.search) {
+        options.filters = {
+          Title:{
+            $containsi: query.search,
+          }
+        }
+      }
 
     const queryString = qs.stringify(options);
     const{data:articles}:AxiosResponse<ICollectionResponse<IArticle[]>> = 
